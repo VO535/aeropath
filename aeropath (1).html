@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AeroPath — The Aerospace Career Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --navy:#0a0e1a;--navy2:#0f1528;--navy3:#141c35;
+  --blue:#1a6fff;--blue2:#4d91ff;--cyan:#00c8f0;
+  --gold:#f0a500;--gold2:#ffc940;
+  --text:#e8eaf6;--text2:#b0b8d8;--text3:#7a82a8;
+  --card:#131929;--card2:#1a2240;--border:#2a3560;
+  --green:#00e676;--red:#ff5252;--orange:#ff9800;
+}
+body{font-family:'DM Sans',sans-serif;background:var(--navy);color:var(--text);min-height:100vh;overflow-x:hidden}
+h1,h2,h3,.orb{font-family:'Orbitron',monospace}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(10,14,26,0.97);border-bottom:1px solid var(--border);padding:0 1.5rem}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;gap:0.5rem;height:60px}
+.logo{font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:700;color:#00c8f0;letter-spacing:2px;cursor:pointer;white-space:nowrap;margin-right:0.5rem}
+.logo span{color:#f0a500}
+.nav-links{display:flex;gap:0.15rem;flex:1;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-btn{background:none;border:none;color:#b0b8d8;font-family:'DM Sans',sans-serif;font-size:0.8rem;padding:0.4rem 0.65rem;cursor:pointer;border-radius:6px;white-space:nowrap;transition:all 0.2s}
+.nav-btn:hover{background:#1a2240;color:#e8eaf6}
+.nav-btn.active{background:#1a2240;color:#00c8f0;font-weight:600}
+.nav-cta{background:#1a6fff;color:#ffffff;border:none;font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:700;padding:0.4rem 1rem;border-radius:6px;cursor:pointer;white-space:nowrap;transition:all 0.2s;margin-left:auto;flex-shrink:0}
+.nav-cta:hover{background:#4d91ff}
+
+/* PAGES */
+.page{display:none;max-width:1200px;margin:0 auto;padding:2rem 1.5rem}
+.page.active{display:block}
+
+/* HOME */
+.hero{text-align:center;padding:4rem 1rem 3rem}
+.hero-badge{display:inline-block;background:rgba(0,200,240,0.15);border:1px solid rgba(0,200,240,0.4);color:#00c8f0;font-size:0.75rem;font-weight:700;letter-spacing:2px;padding:0.4rem 1rem;border-radius:20px;margin-bottom:1.5rem;text-transform:uppercase}
+.hero h1{font-size:clamp(2rem,5vw,3.5rem);font-weight:900;line-height:1.1;margin-bottom:1rem;color:#e8eaf6}
+.hero h1 span{color:#00c8f0}
+.hero p{color:#b0b8d8;font-size:1.1rem;max-width:600px;margin:0 auto 2rem;line-height:1.7}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.btn-primary{background:#1a6fff;color:#ffffff;border:none;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:700;padding:0.75rem 2rem;border-radius:8px;cursor:pointer;transition:all 0.2s}
+.btn-primary:hover{background:#4d91ff;transform:translateY(-1px)}
+.btn-secondary{background:transparent;color:#e8eaf6;border:1px solid #2a3560;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;padding:0.75rem 2rem;border-radius:8px;cursor:pointer;transition:all 0.2s}
+.btn-secondary:hover{border-color:#00c8f0;color:#00c8f0}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin:2rem 0}
+.stat-card{background:#131929;border:1px solid #2a3560;border-radius:12px;padding:1.5rem;text-align:center}
+.stat-num{font-family:'Orbitron',monospace;font-size:1.8rem;font-weight:700;color:#00c8f0}
+.stat-label{color:#b0b8d8;font-size:0.85rem;margin-top:0.25rem}
+.feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1rem;margin-top:2rem}
+.feature-card{background:#131929;border:1px solid #2a3560;border-radius:12px;padding:1.5rem;cursor:pointer;transition:all 0.25s;position:relative;overflow:hidden}
+.feature-card:hover{border-color:#1a6fff;transform:translateY(-2px)}
+.fc-icon{font-size:2rem;margin-bottom:0.75rem}
+.fc-title{font-family:'Orbitron',monospace;font-size:0.9rem;font-weight:600;color:#00c8f0;margin-bottom:0.5rem}
+.fc-desc{color:#b0b8d8;font-size:0.85rem;line-height:1.6}
+.fc-arrow{position:absolute;bottom:1.25rem;right:1.25rem;color:#7a82a8;font-size:1.2rem}
+
+/* SECTION HEADERS */
+.section-header{margin-bottom:2rem}
+.section-header h2{font-size:1.5rem;font-weight:700;color:#e8eaf6}
+.section-header p{color:#b0b8d8;margin-top:0.5rem}
+.tag{display:inline-block;font-size:0.7rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:0.25rem 0.6rem;border-radius:4px;margin-bottom:0.75rem}
+.tag-cyan{background:rgba(0,200,240,0.15);color:#00c8f0;border:1px solid rgba(0,200,240,0.3)}
+.tag-gold{background:rgba(240,165,0,0.15);color:#f0a500;border:1px solid rgba(240,165,0,0.3)}
+.tag-blue{background:rgba(26,111,255,0.15);color:#4d91ff;border:1px solid rgba(26,111,255,0.3)}
+.tag-green{background:rgba(0,230,118,0.15);color:#00e676;border:1px solid rgba(0,230,118,0.3)}
+
+/* CAREER EXPLORER */
+.search-bar{display:flex;gap:0.75rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.search-input{flex:1;min-width:200px;background:#131929;border:1px solid #2a3560;color:#e8eaf6;font-family:'DM Sans',sans-serif;font-size:0.9rem;padding:0.6rem 1rem;border-radius:8px;outline:none}
+.search-input::placeholder{color:#7a82a8}
+.search-input:focus{border-color:#1a6fff}
+.filter-select{background:#131929;border:1px solid #2a3560;color:#e8eaf6;font-family:'DM Sans',sans-serif;font-size:0.85rem;padding:0.6rem 0.8rem;border-radius:8px;cursor:pointer;outline:none}
+.career-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:1rem}
+.career-card{background:#131929;border:1px solid #2a3560;border-radius:12px;padding:1.25rem;cursor:pointer;transition:all 0.2s}
+.career-card:hover{border-color:#1a6fff;background:#1a2240}
+.cc-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:0.75rem}
+.cc-title{font-weight:700;font-size:0.95rem;color:#e8eaf6}
+.cc-salary{font-size:0.8rem;font-weight:700;color:#00e676}
+.cc-field{font-size:0.8rem;color:#b0b8d8;margin-bottom:0.75rem}
+.cc-skills{display:flex;flex-wrap:wrap;gap:0.35rem}
+.skill-tag{font-size:0.7rem;background:rgba(26,111,255,0.2);color:#7ab8ff;border:1px solid rgba(26,111,255,0.35);padding:0.2rem 0.5rem;border-radius:4px}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;display:flex;align-items:center;justify-content:center;padding:1rem}
+.modal{background:#0f1528;border:1px solid #2a3560;border-radius:16px;max-width:700px;width:100%;max-height:90vh;overflow-y:auto;padding:2rem}
+.modal-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem}
+.modal-title{font-family:'Orbitron',monospace;font-size:1.1rem;color:#00c8f0}
+.close-btn{background:none;border:none;color:#b0b8d8;font-size:1.8rem;cursor:pointer;line-height:1;padding:0 0.25rem;transition:color 0.2s}
+.close-btn:hover{color:#e8eaf6}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0}
+.detail-item{background:#131929;border-radius:8px;padding:1rem}
+.detail-label{font-size:0.75rem;color:#7a82a8;text-transform:uppercase;letter-spacing:1px;margin-bottom:0.35rem}
+.detail-value{font-size:0.95rem;font-weight:600;color:#e8eaf6}
+.section-subhead{font-size:0.8rem;font-weight:700;color:#b0b8d8;text-transform:uppercase;letter-spacing:1px;margin:1.25rem 0 0.6rem}
+.bullet-list{list-style:none;display:flex;flex-direction:column;gap:0.4rem}
+.bullet-list li{font-size:0.9rem;color:#b0b8d8;padding-left:1.25rem;position:relative}
+.bullet-list li::before{content:'→';position:absolute;left:0;color:#00c8f0;font-size:0.8rem}
+
+/* ROADMAP */
+.roadmap-form{background:#131929;border:1px solid #2a3560;border-radius:12px;padding:1.5rem;margin-bottom:1.5rem}
+.form-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-bottom:1rem}
+.form-group{display:flex;flex-direction:column;gap:0.4rem}
+.form-label{font-size:0.82rem;color:#b0b8d8;font-weight:600}
+.form-select,.form-input{background:#0f1528;border:1px solid #2a3560;color:#e8eaf6;font-family:'DM Sans',sans-serif;font-size:0.9rem;padding:0.6rem 0.75rem;border-radius:8px;outline:none;transition:border-color 0.2s}
+.form-select:focus,.form-input:focus{border-color:#1a6fff}
+.form-input::placeholder{color:#7a82a8}
+.interests-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:0.5rem;margin-top:0.5rem}
+.interest-btn{background:#0f1528;border:1px solid #2a3560;color:#b0b8d8;font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:600;padding:0.5rem 0.75rem;border-radius:8px;cursor:pointer;transition:all 0.2s;text-align:center}
+.interest-btn:hover{border-color:#1a6fff;color:#e8eaf6}
+.interest-btn.selected{background:rgba(26,111,255,0.2);border-color:#1a6fff;color:#7ab8ff}
+.roadmap-output{display:flex;flex-direction:column;gap:1rem}
+.roadmap-phase{background:#131929;border:1px solid #2a3560;border-radius:12px;overflow:hidden}
+.phase-header{padding:1rem 1.25rem;background:#1a2240;border-bottom:1px solid #2a3560;display:flex;align-items:center;gap:0.75rem}
+.phase-num{width:28px;height:28px;border-radius:50%;background:#1a6fff;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;color:#fff;flex-shrink:0}
+.phase-title{font-weight:700;font-size:0.95rem;color:#e8eaf6}
+.phase-period{margin-left:auto;font-size:0.8rem;color:#7a82a8}
+.phase-content{padding:1.25rem}
+.phase-items{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:0.75rem}
+.phase-item{background:#0f1528;border-radius:8px;padding:0.75rem;border-left:3px solid #1a6fff}
+.pi-category{font-size:0.7rem;text-transform:uppercase;letter-spacing:1px;color:#7a82a8;margin-bottom:0.35rem;font-weight:700}
+.pi-text{font-size:0.85rem;color:#b0b8d8}
+
+/* PROJECTS */
+.project-filters{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0.75rem;margin-bottom:1.5rem}
+.project-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}
+.project-card{background:#131929;border:1px solid #2a3560;border-radius:12px;overflow:hidden;transition:all 0.2s;cursor:pointer}
+.project-card:hover{border-color:#1a6fff;transform:translateY(-2px)}
+.pc-header{padding:1.25rem;background:#1a2240;border-bottom:1px solid #2a3560}
+.pc-badges{display:flex;gap:0.5rem;margin-bottom:0.6rem;flex-wrap:wrap}
+.badge{font-size:0.7rem;font-weight:700;padding:0.2rem 0.6rem;border-radius:4px}
+.badge-beginner{background:rgba(0,230,118,0.2);color:#00e676;border:1px solid rgba(0,230,118,0.35)}
+.badge-intermediate{background:rgba(240,165,0,0.2);color:#f0a500;border:1px solid rgba(240,165,0,0.35)}
+.badge-advanced{background:rgba(255,82,82,0.2);color:#ff7070;border:1px solid rgba(255,82,82,0.35)}
+.pc-title{font-weight:700;font-size:0.95rem;color:#e8eaf6}
+.pc-body{padding:1rem 1.25rem}
+.pc-desc{font-size:0.85rem;color:#b0b8d8;line-height:1.6;margin-bottom:0.75rem}
+
+/* OPPORTUNITIES */
+.opp-tabs{display:flex;gap:0.5rem;margin-bottom:1.5rem;flex-wrap:wrap}
+.opp-tab{background:#131929;border:1px solid #2a3560;color:#b0b8d8;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:600;padding:0.5rem 1rem;border-radius:8px;cursor:pointer;transition:all 0.2s}
+.opp-tab:hover{border-color:#1a6fff;color:#e8eaf6}
+.opp-tab.active{background:rgba(26,111,255,0.2);border-color:#1a6fff;color:#7ab8ff}
+.opp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}
+.opp-card{background:#131929;border:1px solid #2a3560;border-radius:12px;padding:1.25rem;transition:all 0.2s}
+.opp-card:hover{border-color:#00c8f0}
+.oc-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:0.75rem;gap:0.5rem}
+.oc-title{font-weight:700;font-size:0.9rem;color:#e8eaf6;flex:1}
+.oc-deadline{font-size:0.72rem;font-weight:700;padding:0.2rem 0.6rem;background:rgba(255,152,0,0.15);color:#ff9800;border:1px solid rgba(255,152,0,0.3);border-radius:4px;white-space:nowrap}
+.oc-org{font-size:0.8rem;color:#00c8f0;font-weight:600;margin-bottom:0.5rem}
+.oc-desc{font-size:0.82rem;color:#b0b8d8;line-height:1.55;margin-bottom:0.75rem}
+.oc-meta{display:flex;gap:0.75rem;flex-wrap:wrap}
+.oc-meta-item{font-size:0.75rem;color:#7a82a8}
+.apply-btn{width:100%;margin-top:0.75rem;background:#1a6fff;color:#ffffff;border:none;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:700;padding:0.5rem;border-radius:8px;cursor:pointer;transition:background 0.2s}
+.apply-btn:hover{background:#4d91ff}
+
+/* COLLEGES */
+.college-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1rem}
+.college-card{background:#131929;border:1px solid #2a3560;border-radius:12px;padding:1.25rem;cursor:pointer;transition:all 0.2s}
+.college-card:hover{border-color:#f0a500}
+.clg-header{display:flex;align-items:flex-start;gap:1rem;margin-bottom:0.75rem}
+.clg-initial{width:44px;height:44px;border-radius:10px;background:#1a2240;border:1px solid #2a3560;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',monospace;font-size:0.85rem;font-weight:700;color:#f0a500;flex-shrink:0}
+.clg-name{font-weight:700;font-size:0.95rem;color:#e8eaf6}
+.clg-location{font-size:0.8rem;color:#b0b8d8}
+.clg-ranking{font-size:0.8rem;color:#f0a500;font-weight:700}
+.clg-stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5rem;margin:0.75rem 0}
+.clg-stat{background:#0f1528;border-radius:8px;padding:0.6rem;text-align:center}
+.clg-stat-val{font-size:0.88rem;font-weight:700;color:#e8eaf6}
+.clg-stat-lbl{font-size:0.68rem;color:#7a82a8;margin-top:0.2rem}
+.rating-bar{height:6px;background:#0f1528;border-radius:3px;margin-top:0.35rem;overflow:hidden}
+.rating-fill{height:100%;background:linear-gradient(90deg,#1a6fff,#00c8f0);border-radius:3px}
+
+/* PORTFOLIO */
+.portfolio-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin-bottom:1.5rem}
+.portfolio-item{background:#131929;border:1px solid #2a3560;border-radius:12px;padding:1.25rem;position:relative}
+.pi-type-badge{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:0.6rem;display:inline-block;padding:0.2rem 0.5rem;border-radius:4px}
+.pi-title-main{font-weight:700;font-size:0.95rem;color:#e8eaf6;margin-bottom:0.4rem}
+.pi-date{font-size:0.78rem;color:#7a82a8}
+.pi-item-desc{font-size:0.82rem;color:#b0b8d8;margin-top:0.4rem;line-height:1.5}
+.delete-btn{position:absolute;top:1rem;right:1rem;background:none;border:none;color:#7a82a8;font-size:1rem;cursor:pointer;transition:color 0.2s;font-weight:700}
+.delete-btn:hover{color:#ff5252}
+.add-item-form{background:#131929;border:1px solid #2a3560;border-radius:12px;padding:1.5rem;margin-top:1.5rem}
+.add-item-form h3{font-size:1rem;font-weight:700;margin-bottom:1rem;color:#00c8f0}
+.portfolio-progress{background:#131929;border:1px solid #2a3560;border-radius:12px;padding:1.5rem;margin-bottom:1.5rem}
+.progress-bar-wrap{background:#0f1528;border-radius:10px;height:10px;margin:0.5rem 0}
+.progress-bar-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,#1a6fff,#00c8f0);transition:width 0.5s}
+
+/* RESUME */
+.resume-wrapper{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start}
+.resume-preview{background:#ffffff;color:#111111;border-radius:12px;padding:2rem;font-family:'DM Sans',sans-serif}
+.resume-name{font-family:'Orbitron',monospace;font-size:1.2rem;font-weight:700;color:#0a1a3e;margin-bottom:0.25rem}
+.resume-contact{font-size:0.8rem;color:#444444;margin-bottom:1rem;padding-bottom:1rem;border-bottom:2px solid #1a6fff}
+.resume-obj{font-size:0.82rem;color:#333333;line-height:1.6;margin-bottom:0.75rem}
+.resume-section-title{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#1a6fff;margin:1rem 0 0.5rem}
+.resume-item{margin-bottom:0.6rem;padding-bottom:0.6rem;border-bottom:1px solid #eeeeee}
+.resume-item-title{font-size:0.85rem;font-weight:700;color:#111111}
+.resume-item-sub{font-size:0.78rem;color:#555555}
+.resume-skills-wrap{display:flex;flex-wrap:wrap;gap:0.35rem}
+.resume-skill{font-size:0.72rem;background:#e8f0ff;color:#1a4db5;padding:0.2rem 0.5rem;border-radius:4px;font-weight:600}
+.download-resume-btn{width:100%;background:#00e676;color:#002200;border:none;font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:700;padding:0.75rem;border-radius:8px;cursor:pointer;margin-top:1rem;transition:opacity 0.2s}
+.download-resume-btn:hover{opacity:0.9}
+
+/* BACK BTN */
+.back-btn{background:none;border:none;color:#b0b8d8;font-size:0.85rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:0.4rem;margin-bottom:1.5rem;padding:0;transition:color 0.2s;font-family:'DM Sans',sans-serif}
+.back-btn:hover{color:#00c8f0}
+
+/* TOAST */
+.toast{position:fixed;bottom:2rem;right:2rem;background:#1a2240;border:1px solid #2a3560;color:#e8eaf6;padding:0.75rem 1.25rem;border-radius:10px;font-size:0.9rem;font-weight:600;z-index:300;transform:translateY(100px);opacity:0;transition:all 0.3s;pointer-events:none}
+.toast.show{transform:translateY(0);opacity:1}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:3rem 1rem;color:#7a82a8}
+.empty-icon{font-size:3rem;margin-bottom:0.75rem}
+
+/* INFO BOX */
+.info-box{background:#131929;border:1px solid #2a3560;border-radius:8px;padding:1rem;font-size:0.82rem;color:#b0b8d8;line-height:1.6}
+
+@media(max-width:700px){
+  .detail-grid,.resume-wrapper{grid-template-columns:1fr}
+  .hero h1{font-size:1.8rem}
+  .nav-cta{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo" onclick="showPage('home')">AERO<span>PATH</span></div>
+    <div class="nav-links">
+      <button class="nav-btn active" onclick="showPage('home')">Home</button>
+      <button class="nav-btn" onclick="showPage('careers')">Careers</button>
+      <button class="nav-btn" onclick="showPage('roadmap')">Roadmap</button>
+      <button class="nav-btn" onclick="showPage('projects')">Projects</button>
+      <button class="nav-btn" onclick="showPage('opportunities')">Opportunities</button>
+      <button class="nav-btn" onclick="showPage('colleges')">Colleges</button>
+      <button class="nav-btn" onclick="showPage('portfolio')">Portfolio</button>
+      <button class="nav-btn" onclick="showPage('resume')">Resume</button>
+    </div>
+    <button class="nav-cta" onclick="showPage('roadmap')">Get My Roadmap →</button>
+  </div>
+</nav>
+
+<!-- HOME -->
+<div id="page-home" class="page active">
+  <div class="hero">
+    <div class="hero-badge">🚀 The Aerospace Career Platform</div>
+    <h1>Your Path to the <span>Stars</span> Starts Here</h1>
+    <p>AeroPath is the definitive guide for students pursuing careers in aerospace engineering. Personalized roadmaps, real opportunities, and expert guidance — all in one place.</p>
+    <div class="hero-btns">
+      <button class="btn-primary" onclick="showPage('roadmap')">Build My Roadmap</button>
+      <button class="btn-secondary" onclick="showPage('careers')">Explore Careers</button>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat-card"><div class="stat-num">10+</div><div class="stat-label">Career Paths</div></div>
+    <div class="stat-card"><div class="stat-num">10+</div><div class="stat-label">Projects</div></div>
+    <div class="stat-card"><div class="stat-num">12+</div><div class="stat-label">Opportunities</div></div>
+    <div class="stat-card"><div class="stat-num">8+</div><div class="stat-label">Top Colleges</div></div>
+  </div>
+  <div style="text-align:center;margin-top:2.5rem;margin-bottom:1rem">
+    <span class="tag tag-cyan">Platform Features</span>
+    <h2 style="font-family:'Orbitron',monospace;font-size:1.3rem;margin-top:0.5rem;color:#e8eaf6">Everything You Need, One Platform</h2>
+  </div>
+  <div class="feature-grid">
+    <div class="feature-card" onclick="showPage('careers')"><div class="fc-icon">🛸</div><div class="fc-title">Career Explorer</div><div class="fc-desc">Discover aerospace careers with salary data, required skills, and day-in-the-life descriptions.</div><div class="fc-arrow">→</div></div>
+    <div class="feature-card" onclick="showPage('roadmap')"><div class="fc-icon">🗺️</div><div class="fc-title">Roadmap Builder</div><div class="fc-desc">Get a personalized step-by-step plan based on your grade, interests, and career goals.</div><div class="fc-arrow">→</div></div>
+    <div class="feature-card" onclick="showPage('projects')"><div class="fc-icon">🔬</div><div class="fc-title">Project Generator</div><div class="fc-desc">Find meaningful engineering projects matched to your level and available resources.</div><div class="fc-arrow">→</div></div>
+    <div class="feature-card" onclick="showPage('opportunities')"><div class="fc-icon">🎯</div><div class="fc-title">Opportunity Hub</div><div class="fc-desc">Competitions, internships, summer programs, and scholarships — all in one place.</div><div class="fc-arrow">→</div></div>
+    <div class="feature-card" onclick="showPage('colleges')"><div class="fc-icon">🎓</div><div class="fc-title">College Explorer</div><div class="fc-desc">Compare aerospace programs, research rankings, tuition, and industry placement rates.</div><div class="fc-arrow">→</div></div>
+    <div class="feature-card" onclick="showPage('portfolio')"><div class="fc-icon">📁</div><div class="fc-title">Portfolio Builder</div><div class="fc-desc">Document your projects, awards, and achievements to build a standout application.</div><div class="fc-arrow">→</div></div>
+  </div>
+</div>
+
+<!-- CAREERS -->
+<div id="page-careers" class="page">
+  <div id="career-list-view">
+    <div class="section-header"><span class="tag tag-cyan">Explore</span><h2>Aerospace Career Explorer</h2><p>Click any career to see detailed information, required skills, and education paths.</p></div>
+    <div class="search-bar">
+      <input type="text" class="search-input" id="career-search" placeholder="Search careers..." oninput="filterCareers()"/>
+      <select class="filter-select" id="career-filter" onchange="filterCareers()">
+        <option value="all">All Fields</option>
+        <option value="engineering">Engineering</option>
+        <option value="research">Research</option>
+        <option value="operations">Operations</option>
+        <option value="systems">Systems</option>
+      </select>
+    </div>
+    <div class="career-grid" id="career-grid"></div>
+  </div>
+  <div id="career-detail-view" style="display:none">
+    <button class="back-btn" onclick="showCareerList()">← Back to Careers</button>
+    <div id="career-detail-content"></div>
+  </div>
+</div>
+
+<!-- ROADMAP -->
+<div id="page-roadmap" class="page">
+  <div class="section-header"><span class="tag tag-gold">Personalized</span><h2>Your Aerospace Roadmap</h2><p>Answer a few questions and get a customized development plan.</p></div>
+  <div class="roadmap-form">
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Current Grade Level</label>
+        <select class="form-select" id="rm-grade">
+          <option value="">Select grade</option>
+          <option>6th Grade</option><option>7th Grade</option><option>8th Grade</option>
+          <option>9th Grade</option><option>10th Grade</option><option>11th Grade</option>
+          <option>12th Grade</option><option>College Freshman</option><option>College Sophomore</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Career Goal</label>
+        <select class="form-select" id="rm-goal">
+          <option value="">Select career</option>
+          <option>Aerospace Engineer</option><option>Astronautical Engineer</option>
+          <option>Propulsion Engineer</option><option>Avionics Engineer</option>
+          <option>Mission Operations</option><option>Research Scientist</option>
+          <option>Flight Test Engineer</option><option>Systems Engineer</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Academic Strength</label>
+        <select class="form-select" id="rm-strength">
+          <option value="">Select strength</option>
+          <option>Math &amp; Physics</option><option>Computer Science</option>
+          <option>Chemistry &amp; Biology</option><option>All STEM</option><option>Still exploring</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:1rem">
+      <label class="form-label">Areas of Interest (select all that apply)</label>
+      <div class="interests-grid" id="interests-grid"></div>
+    </div>
+    <button class="btn-primary" onclick="generateRoadmap()" style="width:100%;font-size:1rem;padding:0.85rem">Generate My Roadmap →</button>
+  </div>
+  <div id="roadmap-output" class="roadmap-output"></div>
+</div>
+
+<!-- PROJECTS -->
+<div id="page-projects" class="page">
+  <div class="section-header"><span class="tag tag-blue">Build Something</span><h2>Aerospace Project Generator</h2><p>Find hands-on projects matched to your level, topic, and available resources.</p></div>
+  <div class="project-filters">
+    <select class="filter-select" id="proj-level" onchange="filterProjects()" style="width:100%">
+      <option value="all">All Levels</option>
+      <option value="Beginner">Beginner</option>
+      <option value="Intermediate">Intermediate</option>
+      <option value="Advanced">Advanced</option>
+    </select>
+    <select class="filter-select" id="proj-topic" onchange="filterProjects()" style="width:100%">
+      <option value="all">All Topics</option>
+      <option value="Aerodynamics">Aerodynamics</option>
+      <option value="Rocketry">Rocketry</option>
+      <option value="Space">Space Systems</option>
+      <option value="Avionics">Avionics</option>
+      <option value="Propulsion">Propulsion</option>
+    </select>
+    <select class="filter-select" id="proj-time" onchange="filterProjects()" style="width:100%">
+      <option value="all">Any Timeline</option>
+      <option value="1 week">1 Week</option>
+      <option value="2-4 weeks">2-4 Weeks</option>
+      <option value="1-3 months">1-3 Months</option>
+      <option value="3-6 months">3-6 Months</option>
+    </select>
+  </div>
+  <div class="project-grid" id="project-grid"></div>
+  <div id="project-modal" class="modal-overlay" style="display:none" onclick="closeProjectModalBg(event)">
+    <div class="modal">
+      <div class="modal-header">
+        <div class="modal-title" id="pm-title"></div>
+        <button class="close-btn" onclick="closeProjectModal()">×</button>
+      </div>
+      <div id="pm-content"></div>
+    </div>
+  </div>
+</div>
+
+<!-- OPPORTUNITIES -->
+<div id="page-opportunities" class="page">
+  <div class="section-header"><span class="tag tag-green">Discover</span><h2>Opportunity Hub</h2><p>Competitions, internships, summer programs, and scholarships for aspiring aerospace engineers.</p></div>
+  <div class="opp-tabs">
+    <button class="opp-tab active" onclick="filterOpps('all',this)">All</button>
+    <button class="opp-tab" onclick="filterOpps('Competition',this)">Competitions</button>
+    <button class="opp-tab" onclick="filterOpps('Summer Program',this)">Summer Programs</button>
+    <button class="opp-tab" onclick="filterOpps('Internship',this)">Internships</button>
+    <button class="opp-tab" onclick="filterOpps('Scholarship',this)">Scholarships</button>
+    <button class="opp-tab" onclick="filterOpps('Research',this)">Research</button>
+  </div>
+  <div class="opp-grid" id="opp-grid"></div>
+</div>
+
+<!-- COLLEGES -->
+<div id="page-colleges" class="page">
+  <div id="college-list-view">
+    <div class="section-header"><span class="tag tag-gold">Compare</span><h2>College Aerospace Programs</h2><p>Find the right program based on research strength, tuition, and industry connections.</p></div>
+    <div class="search-bar">
+      <input type="text" class="search-input" id="college-search" placeholder="Search colleges..." oninput="filterColleges()"/>
+      <select class="filter-select" id="college-filter" onchange="filterColleges()">
+        <option value="all">All Types</option>
+        <option value="Public">Public</option>
+        <option value="Private">Private</option>
+      </select>
+    </div>
+    <div class="college-grid" id="college-grid"></div>
+  </div>
+  <div id="college-detail-view" style="display:none">
+    <button class="back-btn" onclick="showCollegeList()">← Back to Colleges</button>
+    <div id="college-detail-content"></div>
+  </div>
+</div>
+
+<!-- PORTFOLIO -->
+<div id="page-portfolio" class="page">
+  <div class="section-header"><span class="tag tag-cyan">Track Progress</span><h2>Student Portfolio</h2><p>Document your achievements to build a compelling college application.</p></div>
+  <div class="portfolio-progress">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem">
+      <div style="font-weight:700;font-size:0.9rem;color:#e8eaf6">Portfolio Strength</div>
+      <div style="font-size:0.9rem;font-weight:700;color:#00c8f0" id="portfolio-score">0%</div>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="portfolio-bar" style="width:0%"></div></div>
+    <div style="font-size:0.82rem;color:#b0b8d8;margin-top:0.5rem" id="portfolio-tip">Add projects, awards, and activities to strengthen your portfolio.</div>
+  </div>
+  <div class="portfolio-grid" id="portfolio-grid"></div>
+  <div class="add-item-form">
+    <h3>+ Add Portfolio Item</h3>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Type</label>
+        <select class="form-select" id="pf-type">
+          <option>Project</option><option>Award</option><option>Competition</option>
+          <option>Certification</option><option>Research</option><option>Leadership</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Title</label>
+        <input type="text" class="form-input" id="pf-title" placeholder="e.g. Water Rocket Build"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Date</label>
+        <input type="text" class="form-input" id="pf-date" placeholder="e.g. June 2025"/>
+      </div>
+    </div>
+    <div class="form-group" style="margin-bottom:1rem">
+      <label class="form-label">Description</label>
+      <input type="text" class="form-input" id="pf-desc" placeholder="Brief description of what you did and learned"/>
+    </div>
+    <button class="btn-primary" onclick="addPortfolioItem()" style="padding:0.7rem 2rem">Add to Portfolio →</button>
+  </div>
+</div>
+
+<!-- RESUME -->
+<div id="page-resume" class="page">
+  <div class="section-header"><span class="tag tag-blue">Export</span><h2>Aerospace Resume Builder</h2><p>Fill in your details — portfolio items are pulled in automatically.</p></div>
+  <div class="resume-wrapper" id="resume-wrapper">
+    <div>
+      <div class="roadmap-form">
+        <div class="form-group" style="margin-bottom:0.75rem">
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-input" id="res-name" placeholder="Your Full Name" oninput="updateResume()"/>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="text" class="form-input" id="res-email" placeholder="email@example.com" oninput="updateResume()"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone</label>
+            <input type="text" class="form-input" id="res-phone" placeholder="(555) 000-0000" oninput="updateResume()"/>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">School</label>
+            <input type="text" class="form-input" id="res-school" placeholder="High School Name" oninput="updateResume()"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">GPA (optional)</label>
+            <input type="text" class="form-input" id="res-gpa" placeholder="3.9 / 4.0" oninput="updateResume()"/>
+          </div>
+        </div>
+        <div class="form-group" style="margin-bottom:0.75rem">
+          <label class="form-label">Technical Skills (comma separated)</label>
+          <input type="text" class="form-input" id="res-skills" placeholder="Python, CAD, MATLAB, Arduino" oninput="updateResume()"/>
+        </div>
+        <div class="form-group" style="margin-bottom:1rem">
+          <label class="form-label">Objective Statement</label>
+          <input type="text" class="form-input" id="res-obj" placeholder="Aspiring aerospace engineer with a passion for..." oninput="updateResume()"/>
+        </div>
+        <div class="info-box">💡 Portfolio items are automatically included in your resume. Add more in the Portfolio tab.</div>
+      </div>
+    </div>
+    <div>
+      <div class="resume-preview" id="resume-preview"></div>
+      <button class="download-resume-btn" onclick="downloadResume()">⬇ Download Resume (Text File)</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const CAREERS=[
+  {id:1,title:'Aerospace Engineer',field:'engineering',salary:'$90K–$130K',outlook:'Strong',desc:'Design, develop, and test aircraft, spacecraft, and missiles. Work on everything from aerodynamics to structural analysis.',education:'B.S. Aerospace Engineering',skills:['Aerodynamics','CAD','MATLAB','Structural Analysis','Thermodynamics'],responsibilities:['Design aircraft/spacecraft components','Run CFD simulations','Analyze test flight data','Write technical reports','Collaborate with cross-functional teams'],courses:['AP Physics','AP Calculus','AP Chemistry','Pre-Calculus','Computer Science'],companies:['Boeing','Lockheed Martin','SpaceX','NASA','Northrop Grumman']},
+  {id:2,title:'Propulsion Engineer',field:'engineering',salary:'$95K–$140K',outlook:'Very Strong',desc:'Specialize in rocket engines, jet turbines, and propulsion systems that power aerospace vehicles.',education:'B.S. Mechanical or Aerospace Engineering',skills:['Thermodynamics','Fluid Mechanics','Combustion','CAD','ANSYS'],responsibilities:['Design propulsion systems','Test engine performance','Optimize fuel efficiency','Analyze combustion data','Develop propellant systems'],courses:['AP Physics','AP Chemistry','AP Calculus','Thermodynamics'],companies:['SpaceX','Blue Origin','Aerojet Rocketdyne','Rolls-Royce','GE Aviation']},
+  {id:3,title:'Avionics Engineer',field:'engineering',salary:'$88K–$125K',outlook:'Strong',desc:'Design electronic systems for aircraft and spacecraft including navigation, communication, and flight control.',education:'B.S. Electrical or Aerospace Engineering',skills:['Embedded Systems','C/C++','PCB Design','Signal Processing','FPGA'],responsibilities:['Design avionics hardware','Program flight computers','Test navigation systems','Debug electronic systems','Write firmware'],courses:['AP Physics','Computer Science','AP Calculus','Electronics'],companies:['Collins Aerospace','Honeywell','Garmin','Thales','BAE Systems']},
+  {id:4,title:'Mission Operations Engineer',field:'operations',salary:'$85K–$120K',outlook:'Moderate',desc:'Plan and execute spacecraft missions from launch through end-of-life, monitoring health and commanding vehicles.',education:'B.S. Aerospace, Electrical, or Computer Engineering',skills:['Mission Planning','Python','Telemetry Analysis','AOCS','Ops Procedures'],responsibilities:['Monitor spacecraft health','Execute mission plans','Respond to anomalies','Coordinate launch operations','Train operations teams'],courses:['AP Physics','Computer Science','AP Calculus'],companies:['NASA','ESA','SpaceX','Maxar','Planet Labs']},
+  {id:5,title:'Systems Engineer',field:'systems',salary:'$92K–$135K',outlook:'Strong',desc:'Integrate complex aerospace systems, ensuring all components work together as a cohesive whole.',education:'B.S. Systems, Aerospace, or Mechanical Engineering',skills:['Requirements Engineering','MBSE','Systems Architecture','Trade Studies','Risk Analysis'],responsibilities:['Define system requirements','Create architecture diagrams','Manage interfaces','Lead design reviews','Track performance metrics'],courses:['AP Physics','AP Calculus','Computer Science','Engineering Design'],companies:['Lockheed Martin','Boeing','Raytheon','NASA','Northrop Grumman']},
+  {id:6,title:'Aerospace Research Scientist',field:'research',salary:'$80K–$150K',outlook:'Moderate',desc:'Conduct fundamental and applied research to advance aerospace technologies and scientific understanding.',education:'Ph.D. Aerospace or related field preferred',skills:['Research Methods','Data Analysis','Python/MATLAB','Technical Writing','Experimental Design'],responsibilities:['Design experiments','Analyze research data','Publish papers','Present at conferences','Mentor students'],courses:['AP Physics','AP Calculus','AP Chemistry','Biology','Statistics'],companies:['NASA','DARPA','MIT','Caltech','RAND Corporation']},
+  {id:7,title:'Flight Test Engineer',field:'engineering',salary:'$95K–$145K',outlook:'Moderate',desc:'Plan and conduct test flights to evaluate aircraft performance, safety, and handling characteristics.',education:'B.S. Aerospace Engineering',skills:['Flight Mechanics','Data Acquisition','Instrumentation','Risk Assessment','Technical Writing'],responsibilities:['Plan test programs','Analyze flight data','Write test reports','Coordinate with pilots','Certify aircraft systems'],courses:['AP Physics','AP Calculus','Statistics','Computer Science'],companies:['Boeing','Lockheed Martin','NASA Armstrong','Edwards AFB','Airbus']},
+  {id:8,title:'Satellite Engineer',field:'systems',salary:'$88K–$130K',outlook:'Very Strong',desc:'Design, build, and operate satellites for communications, Earth observation, navigation, and science missions.',education:'B.S. Electrical or Aerospace Engineering',skills:['Orbital Mechanics','Power Systems','Thermal Analysis','RF Communications','Attitude Control'],responsibilities:['Design satellite subsystems','Analyze orbital trajectories','Test space hardware','Support launch campaigns','Operate on-orbit assets'],courses:['AP Physics','AP Calculus','Computer Science','Electronics'],companies:['SpaceX','Planet Labs','Maxar','Ball Aerospace','Airbus Defence']},
+  {id:9,title:'Structural Engineer',field:'engineering',salary:'$85K–$120K',outlook:'Stable',desc:'Analyze and design aircraft and spacecraft structures to withstand flight loads while minimizing weight.',education:'B.S. Aerospace or Civil Engineering',skills:['FEA','NASTRAN','Composite Materials','Fatigue Analysis','CAD'],responsibilities:['Design structural components','Run finite element analysis','Conduct coupon testing','Write stress reports','Support manufacturing'],courses:['AP Physics','AP Calculus','AP Chemistry','Engineering Design'],companies:['Boeing','Airbus','Northrop Grumman','Spirit AeroSystems','NASA']},
+  {id:10,title:'Space Mission Planner',field:'operations',salary:'$80K–$115K',outlook:'Growing',desc:'Develop mission concepts, trajectories, and operational plans for space exploration and science missions.',education:'B.S. Aerospace Engineering or Astrophysics',skills:['Orbital Mechanics','STK','Python','Mission Design','Trajectory Optimization'],responsibilities:['Design mission concepts','Optimize trajectories','Assess mission risks','Build operations timelines','Coordinate with science teams'],courses:['AP Physics','AP Calculus','Astronomy','Computer Science'],companies:['NASA JPL','ESA','SpaceX','Orbital Sciences','Ball Aerospace']},
+];
+
+const INTERESTS=['Rockets','Satellites','Aircraft Design','Space Exploration','Drones','Robotics','Programming','Electronics','Physics','Mathematics','Research','Flight Simulation'];
+
+const PROJECTS=[
+  {title:'Water Rocket Optimization',level:'Beginner',topic:'Rocketry',time:'1 week',desc:'Design and launch water bottle rockets, testing different fin configurations and water-to-air ratios to maximize altitude.',skills:['Aerodynamics','Data Collection','Scientific Method'],objectives:'Understand thrust, drag, and lift through hands-on experimentation.',materials:'2L bottles, bicycle pump, launch stand, measuring tape, fins (cardboard/foam)',timeline:'Day 1-2: Research & design. Day 3-4: Build 3 variants. Day 5-7: Launch, measure, analyze.'},
+  {title:'Paper Airfoil Testing',level:'Beginner',topic:'Aerodynamics',time:'1 week',desc:'Build and test different airfoil cross-sections using paper to measure lift characteristics with a simple wind tunnel setup.',skills:['Aerodynamics','Measurement','Analysis'],objectives:'Learn how airfoil shape affects lift generation.',materials:'Cardstock paper, tape, ruler, fan, string, small weights',timeline:'Week 1: Build 5 airfoil shapes and systematically test each.'},
+  {title:'Drone Navigation System',level:'Intermediate',topic:'Avionics',time:'2-4 weeks',desc:'Program an autonomous drone to navigate a waypoint course using GPS coordinates and onboard sensors.',skills:['Python','GPS','Control Systems','Electronics'],objectives:'Understand autonomous navigation, GPS integration, and PID control.',materials:'Quadcopter kit, Raspberry Pi or Arduino, GPS module, ultrasonic sensors',timeline:'Week 1: Setup hardware. Week 2: Basic flight. Week 3-4: Waypoint navigation.'},
+  {title:'Wind Tunnel Investigation',level:'Intermediate',topic:'Aerodynamics',time:'2-4 weeks',desc:'Build a low-speed wind tunnel to quantitatively measure drag on different body shapes using a simple force sensor.',skills:['Fluid Mechanics','CAD','Electronics','Data Analysis'],objectives:'Quantify aerodynamic drag and learn wind tunnel testing methodology.',materials:'Cardboard box, fan, straws (flow straightener), force sensor, Arduino',timeline:'Week 1-2: Build tunnel. Week 3-4: Test 10+ shapes and analyze results.'},
+  {title:'Rocket Telemetry System',level:'Intermediate',topic:'Rocketry',time:'2-4 weeks',desc:'Build a small electronics payload that records altitude, acceleration, and temperature during model rocket flights.',skills:['Electronics','Arduino','Data Logging','Sensors'],objectives:'Design a flight data recorder and analyze rocket flight performance.',materials:'Arduino Nano, BMP280 pressure sensor, MPU-6050 IMU, SD card module, LiPo battery',timeline:'Week 1: Electronics assembly. Week 2: Code & ground test. Week 3-4: Launch & analyze.'},
+  {title:'High-Altitude Balloon Mission',level:'Intermediate',topic:'Space',time:'1-3 months',desc:'Design and launch a weather balloon payload to 30km altitude, capturing data and images of near-space.',skills:['Electronics','Python','GPS','Meteorology','Project Management'],objectives:'Experience a complete mission lifecycle from design to recovery.',materials:'Weather balloon, helium, payload box, GPS tracker, camera, parachute, sensors',timeline:'Month 1: Design & FAA permits. Month 2: Build & ground test. Month 3: Launch & analyze.'},
+  {title:'Flight Simulation Model',level:'Intermediate',topic:'Avionics',time:'2-4 weeks',desc:'Build a 6-degree-of-freedom flight dynamics model in Python and simulate an aircraft trajectory.',skills:['Python','Flight Mechanics','Numerical Methods','Physics'],objectives:'Understand equations of motion and flight simulation techniques.',materials:'Python (free), NumPy, Matplotlib libraries',timeline:'Week 1: Study equations of motion. Week 2-3: Code model. Week 4: Validation & analysis.'},
+  {title:'Satellite Subsystem Design',level:'Advanced',topic:'Space',time:'1-3 months',desc:'Design and prototype a CubeSat attitude determination and control subsystem (ADCS) using magnetometers and reaction wheels.',skills:['Orbital Mechanics','Control Theory','MATLAB','Electronics'],objectives:'Understand spacecraft attitude control and sensor fusion algorithms.',materials:'Arduino, magnetometers, gyroscopes, small DC motors, 3D printer',timeline:'Month 1: Design & simulation. Month 2: Hardware prototype. Month 3: Testing & documentation.'},
+  {title:'Airfoil CFD Analysis',level:'Advanced',topic:'Aerodynamics',time:'1-3 months',desc:'Use OpenFOAM to simulate airflow over NACA airfoils and validate results against experimental data.',skills:['CFD','Linux','Python','Aerodynamics','Meshing'],objectives:'Learn professional computational fluid dynamics workflows used in the aerospace industry.',materials:'Computer with Linux, OpenFOAM (free), ParaView (free)',timeline:'Month 1: Learn OpenFOAM basics. Month 2: NACA airfoil simulations. Month 3: Analysis & report.'},
+  {title:'Rocket Propulsion Study',level:'Advanced',topic:'Propulsion',time:'3-6 months',desc:'Design, build, and test a static thrust stand to characterize small solid rocket motors by measuring thrust curves.',skills:['Propulsion','Electronics','Data Acquisition','Safety Protocols'],objectives:'Understand rocket motor performance parameters and testing methodology.',materials:'Load cell, Arduino, data logger, test stand materials, commercial motors (APCP)',timeline:'Month 1-2: Design & build stand. Month 3-4: Testing protocol. Month 5-6: Characterization study.'},
+];
+
+const OPPORTUNITIES=[
+  {type:'Competition',title:'Team America Rocketry Challenge (TARC)',org:'Aerospace Industries Association',desc:'National high school rocketry competition. Teams design, build, and fly a model rocket to precise altitude and duration targets.',grade:'9-12',cost:'Low',deadline:'Feb 2026',location:'National (US)'},
+  {type:'Competition',title:'FIRST Robotics Competition',org:'FIRST',desc:'Build a robot to compete in complex engineering challenges. Many aerospace companies sponsor teams and actively recruit participants.',grade:'9-12',cost:'Team-based',deadline:'Jan 2026',location:'International'},
+  {type:'Summer Program',title:'NASA Academy',org:'NASA',desc:'10-week residential research program at NASA centers for undergraduate students. Work on real NASA missions with leading scientists and engineers.',grade:'College',cost:'Paid (stipend)',deadline:'Feb 2026',location:'Various NASA Centers'},
+  {type:'Summer Program',title:'STEM Rising Stars',org:'Lockheed Martin',desc:'Immersive summer program introducing high school juniors and seniors to aerospace engineering through hands-on projects.',grade:'11-12',cost:'Free',deadline:'Mar 2026',location:'Various LM Sites'},
+  {type:'Internship',title:'NASA SEES High School Internship',org:'NASA / UT Austin',desc:'Paid 8-week summer internship conducting real NASA research remotely or in-person with NASA scientists and engineers.',grade:'9-12',cost:'Paid',deadline:'Mar 2026',location:'Remote / Austin, TX'},
+  {type:'Scholarship',title:'AIA Foundation Scholarship',org:'Aerospace Industries Association',desc:'Scholarships for students pursuing aerospace/aeronautical engineering degrees. Up to $10,000 per year for qualifying students.',grade:'12 / College',cost:'N/A',deadline:'Jan 2026',location:'National (US)'},
+  {type:'Competition',title:'Conrad Challenge',org:'Conrad Foundation',desc:'Global innovation and entrepreneurship competition for students. Aerospace is one of the key challenge areas with cash prizes.',grade:'9-12',cost:'Low',deadline:'Nov 2025',location:'International'},
+  {type:'Research',title:'Research Science Institute (RSI)',org:'Center for Excellence in Education',desc:'Highly selective 6-week summer STEM research program at MIT for high school students. Work with leading university researchers.',grade:'11',cost:'Free (merit-based)',deadline:'Jan 2026',location:'MIT, Cambridge, MA'},
+  {type:'Summer Program',title:'SpaceX Internship',org:'SpaceX',desc:'Technical internships for undergraduate and graduate students in engineering, software, and operations across SpaceX facilities.',grade:'College',cost:'Paid',deadline:'Rolling',location:'Hawthorne, CA / Cape Canaveral, FL'},
+  {type:'Scholarship',title:'AIAA Foundation Scholarship',org:'AIAA',desc:'Multiple scholarships for undergraduate and graduate students in aerospace engineering and related fields.',grade:'College',cost:'N/A',deadline:'Jan 2026',location:'National (US)'},
+  {type:'Competition',title:'Science Olympiad',org:'Science Olympiad',desc:'Annual academic competition with aerospace-related events including Wright Stuff, Experimental Design, and Astronomy.',grade:'6-12',cost:'Low',deadline:'Varies',location:'National (US)'},
+  {type:'Research',title:'Regeneron Science Talent Search',org:'Society for Science',desc:'Prestigious national competition for original research projects by high school seniors. Top prize is $250,000.',grade:'12',cost:'Free',deadline:'Nov 2025',location:'Washington, DC'},
+];
+
+const COLLEGES=[
+  {name:'MIT',location:'Cambridge, MA',type:'Private',ranking:'#1 Aerospace',tuition:'$59K/yr',researchRating:10,placement:97,facilities:9,aid:'Strong',desc:'World-leading aerospace program with unmatched research facilities, strong NASA connections, and elite industry placement.',programs:['Aero/Astro BS','Space Systems MS','Propulsion PhD'],strengths:['Space systems','Computational aerodynamics','Bio-inspired flight'],clubs:['MIT Rocket Team','AIAA Chapter','MIT AeroAstro Society'],initials:'MIT'},
+  {name:'Caltech',location:'Pasadena, CA',type:'Private',ranking:'#2 Aerospace',tuition:'$58K/yr',researchRating:10,placement:95,facilities:9,aid:'Very Strong',desc:'Intimate research environment with direct JPL partnership. Outstanding in aerospace research, particularly space exploration missions.',programs:['Aerospace BS','Space Engineering MS'],strengths:['Spacecraft design','Astrophysics','Structural mechanics'],clubs:['AIAA Chapter','Rocketry Club'],initials:'CIT'},
+  {name:'Georgia Tech',location:'Atlanta, GA',type:'Public',ranking:'#3 Aerospace',tuition:'$13K in-state',researchRating:9,placement:96,facilities:9,aid:'Moderate',desc:'Top public aerospace program with outstanding industry partnerships and career outcomes at an excellent value for students.',programs:['Aerospace Engineering BS/MS/PhD'],strengths:['Rotorcraft','Combustion','Systems design'],clubs:['AIAA Chapter','Rocketry Club','Formula SAE'],initials:'GT'},
+  {name:'Univ. of Michigan',location:'Ann Arbor, MI',type:'Public',ranking:'#4 Aerospace',tuition:'$16K in-state',researchRating:9,placement:93,facilities:8,aid:'Good',desc:'Comprehensive aerospace program with world-class facilities including its own wind tunnels and propulsion testing laboratory.',programs:['Aerospace Engineering BS/MS/PhD'],strengths:['Aerodynamics','Propulsion','Space systems'],clubs:['AIAA','Michigan Rocket Team','M-FLY'],initials:'UM'},
+  {name:'Stanford University',location:'Stanford, CA',type:'Private',ranking:'#5 Aerospace',tuition:'$60K/yr',researchRating:10,placement:96,facilities:9,aid:'Very Strong',desc:'Silicon Valley location enables unique aerospace-tech intersections. Particularly strong in autonomous systems and space technology.',programs:['Aero/Astro BS/MS/PhD'],strengths:['Autonomous systems','Space propulsion','Computational methods'],clubs:['AIAA','Stanford SSI','Aero/Astro Club'],initials:'SU'},
+  {name:'Purdue University',location:'West Lafayette, IN',type:'Public',ranking:'#6 Aerospace',tuition:'$10K in-state',researchRating:8,placement:94,facilities:8,aid:'Good',desc:'Historic program that has trained more astronauts than any other university. Outstanding industry connections and co-op program.',programs:['Aeronautical & Astronautical BS/MS/PhD'],strengths:['Flight test','Propulsion','Human spaceflight'],clubs:['Purdue Space Program','AIAA','AEM Club'],initials:'PU'},
+  {name:'UT Austin',location:'Austin, TX',type:'Public',ranking:'#7 Aerospace',tuition:'$11K in-state',researchRating:8,placement:90,facilities:8,aid:'Moderate',desc:'Strong growing program with proximity to NASA Johnson Space Center and a thriving Texas aerospace industry ecosystem.',programs:['Aerospace Engineering BS/MS/PhD'],strengths:['Space systems','Orbital mechanics','Composites'],clubs:['Texas Rocket Engineering Lab','AIAA'],initials:'UT'},
+  {name:'CU Boulder',location:'Boulder, CO',type:'Public',ranking:'#8 Aerospace',tuition:'$12K in-state',researchRating:8,placement:89,facilities:8,aid:'Moderate',desc:'Excellent space-focused program with direct partnerships with Boulder\'s thriving commercial aerospace and satellite industry cluster.',programs:['Aerospace Engineering BS/MS/PhD'],strengths:['SmallSats','Space weather','Remote sensing'],clubs:['CU Boulder Rocketry','AIAA','RASC-AL'],initials:'CU'},
+];
+
+let portfolioItems=JSON.parse(localStorage.getItem('aeropath-portfolio')||'[]');
+let selectedInterests=[];
+
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b=>{
+    b.classList.remove('active');
+    if(b.getAttribute('onclick')&&b.getAttribute('onclick').includes("'"+id+"'"))b.classList.add('active');
+  });
+  document.getElementById('page-'+id).classList.add('active');
+  window.scrollTo(0,0);
+  if(id==='resume')updateResume();
+  if(id==='portfolio')renderPortfolio();
+}
+
+// CAREERS
+function renderCareers(list){
+  const g=document.getElementById('career-grid');
+  if(!list.length){g.innerHTML='<div class="empty-state"><div class="empty-icon">🔭</div><p>No careers match your search.</p></div>';return;}
+  g.innerHTML=list.map(c=>`
+    <div class="career-card" onclick="showCareerDetail(${c.id})">
+      <div class="cc-header">
+        <div class="cc-title">${c.title}</div>
+        <div class="cc-salary">${c.salary}</div>
+      </div>
+      <div class="cc-field">${c.field.charAt(0).toUpperCase()+c.field.slice(1)} · Outlook: <strong>${c.outlook}</strong></div>
+      <div class="cc-skills">${c.skills.slice(0,3).map(s=>`<span class="skill-tag">${s}</span>`).join('')}</div>
+    </div>`).join('');
+}
+function filterCareers(){
+  const q=document.getElementById('career-search').value.toLowerCase();
+  const f=document.getElementById('career-filter').value;
+  renderCareers(CAREERS.filter(c=>(f==='all'||c.field===f)&&(c.title.toLowerCase().includes(q)||c.skills.some(s=>s.toLowerCase().includes(q)))));
+}
+function showCareerDetail(id){
+  const c=CAREERS.find(x=>x.id===id);
+  document.getElementById('career-list-view').style.display='none';
+  document.getElementById('career-detail-view').style.display='block';
+  document.getElementById('career-detail-content').innerHTML=`
+    <div style="margin-bottom:1.5rem">
+      <span class="tag tag-cyan">${c.field}</span>
+      <h2 style="font-family:'Orbitron',monospace;font-size:1.4rem;color:#e8eaf6;margin-top:0.5rem">${c.title}</h2>
+      <p style="color:#b0b8d8;margin-top:0.5rem;line-height:1.7">${c.desc}</p>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-item"><div class="detail-label">Salary Range</div><div class="detail-value" style="color:#00e676">${c.salary}</div></div>
+      <div class="detail-item"><div class="detail-label">Job Outlook</div><div class="detail-value">${c.outlook}</div></div>
+      <div class="detail-item"><div class="detail-label">Required Education</div><div class="detail-value">${c.education}</div></div>
+      <div class="detail-item"><div class="detail-label">Field</div><div class="detail-value">${c.field.charAt(0).toUpperCase()+c.field.slice(1)}</div></div>
+    </div>
+    <div class="section-subhead">Daily Responsibilities</div>
+    <ul class="bullet-list">${c.responsibilities.map(r=>`<li>${r}</li>`).join('')}</ul>
+    <div class="section-subhead">Key Technical Skills</div>
+    <div class="cc-skills" style="margin-bottom:1rem">${c.skills.map(s=>`<span class="skill-tag">${s}</span>`).join('')}</div>
+    <div class="section-subhead">Recommended High School Courses</div>
+    <ul class="bullet-list">${c.courses.map(r=>`<li>${r}</li>`).join('')}</ul>
+    <div class="section-subhead">Top Employers</div>
+    <ul class="bullet-list">${c.companies.map(r=>`<li>${r}</li>`).join('')}</ul>
+    <div style="margin-top:1.5rem;display:flex;gap:0.75rem;flex-wrap:wrap">
+      <button class="btn-primary" onclick="showPage('roadmap')">Build Roadmap for This Career →</button>
+      <button class="btn-secondary" onclick="showPage('projects')">Find Related Projects</button>
+    </div>`;
+}
+function showCareerList(){
+  document.getElementById('career-list-view').style.display='block';
+  document.getElementById('career-detail-view').style.display='none';
+}
+
+// ROADMAP
+function renderInterests(){
+  document.getElementById('interests-grid').innerHTML=INTERESTS.map(i=>`
+    <button class="interest-btn" onclick="toggleInterest('${i}',this)">${i}</button>`).join('');
+}
+function toggleInterest(i,btn){
+  if(selectedInterests.includes(i)){selectedInterests=selectedInterests.filter(x=>x!==i);btn.classList.remove('selected');}
+  else{selectedInterests.push(i);btn.classList.add('selected');}
+}
+function generateRoadmap(){
+  const grade=document.getElementById('rm-grade').value;
+  const goal=document.getElementById('rm-goal').value;
+  if(!grade||!goal){showToast('Please select your grade level and career goal!');return;}
+  const phases=[
+    {title:'Foundation Building',period:'This Year / Next 3 Months',color:'#1a6fff',items:[
+      {cat:'Academics',text:'Focus on Algebra, Pre-Calculus, and Physics fundamentals'},
+      {cat:'Academics',text:'Pursue AP Physics and AP Calculus as soon as available'},
+      {cat:'Skills',text:'Start learning Python on Codecademy or Khan Academy (free)'},
+      {cat:'Activities',text:'Join or start a robotics or aerospace club at school'},
+      {cat:'Project',text:'Build a water rocket or paper airplane experiment'},
+    ]},
+    {title:'Skill Development',period:'6–12 Months Out',color:'#00c8f0',items:[
+      {cat:'Academics',text:'Enroll in AP Chemistry and Computer Science'},
+      {cat:'Skills',text:'Learn CAD software — Fusion 360 is free for students'},
+      {cat:'Skills',text:goal.includes('Avionics')?'Learn electronics and Arduino programming':'Study orbital mechanics and astrodynamics basics'},
+      {cat:'Competition',text:'Enter Science Olympiad or Team America Rocketry Challenge (TARC)'},
+      {cat:'Project',text:goal.includes('Propulsion')?'Build a static rocket motor test stand':'Design and build a high-altitude balloon payload'},
+    ]},
+    {title:'Experience Building',period:'1–2 Years Out',color:'#f0a500',items:[
+      {cat:'Academics',text:'Take dual-credit or community college engineering courses'},
+      {cat:'Research',text:'Reach out to local universities for summer research opportunities'},
+      {cat:'Competition',text:'Lead a team in FIRST Robotics or the Conrad Challenge'},
+      {cat:'Skills',text:'Learn MATLAB and/or SolidWorks for engineering analysis'},
+      {cat:'Network',text:'Attend AIAA local events and aerospace career fairs'},
+    ]},
+    {title:'College & Career Launch',period:'Senior Year / College',color:'#00e676',items:[
+      {cat:'Application',text:'Apply to top aerospace programs: MIT, Georgia Tech, Purdue, Michigan'},
+      {cat:'Internship',text:'Apply to NASA SEES, SpaceX, or Lockheed Martin internships'},
+      {cat:'Scholarship',text:'Apply for AIAA Foundation and AIA Foundation scholarships'},
+      {cat:'Portfolio',text:'Document all projects and achievements in your AeroPath portfolio'},
+      {cat:'Network',text:'Connect with aerospace engineers on LinkedIn and at career fairs'},
+    ]},
+  ];
+  const out=document.getElementById('roadmap-output');
+  out.innerHTML=`
+    <div style="background:#131929;border:1px solid #2a3560;border-radius:12px;padding:1.25rem;margin-bottom:1rem;border-left:4px solid #00c8f0">
+      <div style="font-size:0.78rem;color:#7a82a8;text-transform:uppercase;letter-spacing:1px;margin-bottom:0.4rem;font-weight:700">Your Personalized Plan</div>
+      <div style="font-size:0.95rem;color:#e8eaf6">Goal: <strong style="color:#00c8f0">${goal}</strong> · Grade: <strong style="color:#00c8f0">${grade}</strong>${selectedInterests.length?` · Interests: <strong style="color:#f0a500">${selectedInterests.slice(0,3).join(', ')}</strong>`:''}</div>
+    </div>
+    ${phases.map((p,i)=>`
+    <div class="roadmap-phase">
+      <div class="phase-header">
+        <div class="phase-num" style="background:${p.color};color:#000011">${i+1}</div>
+        <div class="phase-title">${p.title}</div>
+        <div class="phase-period">${p.period}</div>
+      </div>
+      <div class="phase-content">
+        <div class="phase-items">
+          ${p.items.map(item=>`<div class="phase-item" style="border-left-color:${p.color}"><div class="pi-category">${item.cat}</div><div class="pi-text">${item.text}</div></div>`).join('')}
+        </div>
+      </div>
+    </div>`).join('')}
+    <div style="text-align:center;margin-top:1.5rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+      <button class="btn-primary" onclick="showPage('opportunities')">Find Opportunities →</button>
+      <button class="btn-secondary" onclick="showPage('projects')">Get Project Ideas</button>
+    </div>`;
+  showToast('Roadmap generated! Scroll down to see your plan.');
+}
+
+// PROJECTS
+function renderProjects(list){
+  const g=document.getElementById('project-grid');
+  if(!list.length){g.innerHTML='<div class="empty-state"><div class="empty-icon">🔬</div><p>No projects match your filters.</p></div>';return;}
+  g.innerHTML=list.map((p,i)=>`
+    <div class="project-card" onclick="showProjectModal(${i})">
+      <div class="pc-header">
+        <div class="pc-badges">
+          <span class="badge badge-${p.level.toLowerCase()}">${p.level}</span>
+          <span class="badge" style="background:rgba(176,184,216,0.12);color:#b0b8d8;border:1px solid #2a3560">${p.topic}</span>
+          <span class="badge" style="background:rgba(0,200,240,0.1);color:#00c8f0;border:1px solid rgba(0,200,240,0.25)">⏱ ${p.time}</span>
+        </div>
+        <div class="pc-title">${p.title}</div>
+      </div>
+      <div class="pc-body">
+        <div class="pc-desc">${p.desc}</div>
+        <div class="pc-skills">${p.skills.map(s=>`<span class="skill-tag">${s}</span>`).join('')}</div>
+      </div>
+    </div>`).join('');
+}
+function filterProjects(){
+  const lv=document.getElementById('proj-level').value;
+  const tp=document.getElementById('proj-topic').value;
+  const ti=document.getElementById('proj-time').value;
+  const filtered=PROJECTS.filter(p=>(lv==='all'||p.level===lv)&&(tp==='all'||p.topic===tp)&&(ti==='all'||p.time===ti));
+  renderProjects(filtered);
+}
+function showProjectModal(idx){
+  const lv=document.getElementById('proj-level').value;
+  const tp=document.getElementById('proj-topic').value;
+  const ti=document.getElementById('proj-time').value;
+  const filtered=PROJECTS.filter(p=>(lv==='all'||p.level===lv)&&(tp==='all'||p.topic===tp)&&(ti==='all'||p.time===ti));
+  const p=filtered[idx];
+  if(!p)return;
+  document.getElementById('pm-title').textContent=p.title;
+  document.getElementById('pm-content').innerHTML=`
+    <div style="display:flex;gap:0.5rem;flex-wrap:wrap;margin-bottom:1rem">
+      <span class="badge badge-${p.level.toLowerCase()}">${p.level}</span>
+      <span class="badge" style="background:rgba(0,200,240,0.1);color:#00c8f0;border:1px solid rgba(0,200,240,0.25)">${p.topic}</span>
+      <span class="badge" style="background:rgba(176,184,216,0.1);color:#b0b8d8;border:1px solid #2a3560">⏱ ${p.time}</span>
+    </div>
+    <p style="color:#b0b8d8;line-height:1.7;margin-bottom:1rem">${p.desc}</p>
+    <div class="section-subhead">Objectives</div>
+    <p style="color:#b0b8d8;font-size:0.9rem;margin-bottom:1rem">${p.objectives}</p>
+    <div class="section-subhead">Materials Needed</div>
+    <p style="color:#b0b8d8;font-size:0.9rem;margin-bottom:1rem">${p.materials}</p>
+    <div class="section-subhead">Suggested Timeline</div>
+    <p style="color:#b0b8d8;font-size:0.9rem;margin-bottom:1rem">${p.timeline}</p>
+    <div class="section-subhead">Skills You Will Learn</div>
+    <div class="cc-skills" style="margin-bottom:1.5rem">${p.skills.map(s=>`<span class="skill-tag">${s}</span>`).join('')}</div>
+    <button class="btn-primary" onclick="addProjectToPortfolio('${p.title.replace(/'/g,"\\'")}');closeProjectModal()" style="width:100%;font-size:1rem;padding:0.75rem">Add to My Portfolio →</button>`;
+  document.getElementById('project-modal').style.display='flex';
+}
+function closeProjectModal(){document.getElementById('project-modal').style.display='none';}
+function closeProjectModalBg(e){if(e.target===document.getElementById('project-modal'))closeProjectModal();}
+function addProjectToPortfolio(title){
+  portfolioItems.push({type:'Project',title,date:new Date().toLocaleDateString('en-US',{month:'short',year:'numeric'}),desc:'Aerospace engineering project'});
+  savePortfolio();
+  showToast('Project added to portfolio!');
+}
+
+// OPPORTUNITIES
+function renderOpps(list){
+  const g=document.getElementById('opp-grid');
+  if(!list.length){g.innerHTML='<div class="empty-state"><div class="empty-icon">🎯</div><p>No opportunities found.</p></div>';return;}
+  g.innerHTML=list.map(o=>`
+    <div class="opp-card">
+      <div class="oc-header">
+        <div class="oc-title">${o.title}</div>
+        <div class="oc-deadline">${o.deadline}</div>
+      </div>
+      <div class="oc-org">${o.org}</div>
+      <div class="oc-desc">${o.desc}</div>
+      <div class="oc-meta">
+        <div class="oc-meta-item">👩‍🎓 ${o.grade}</div>
+        <div class="oc-meta-item">💰 ${o.cost}</div>
+        <div class="oc-meta-item">📍 ${o.location}</div>
+      </div>
+      <button class="apply-btn" onclick="showToast('Search for &quot;${o.title}&quot; online to apply!')">Learn More / Apply →</button>
+    </div>`).join('');
+}
+function filterOpps(type,btn){
+  document.querySelectorAll('.opp-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  renderOpps(type==='all'?OPPORTUNITIES:OPPORTUNITIES.filter(o=>o.type===type));
+}
+
+// COLLEGES
+function renderColleges(list){
+  const g=document.getElementById('college-grid');
+  if(!list.length){g.innerHTML='<div class="empty-state"><div class="empty-icon">🎓</div><p>No colleges found.</p></div>';return;}
+  g.innerHTML=list.map(c=>`
+    <div class="college-card" onclick="showCollegeDetail('${c.name}')">
+      <div class="clg-header">
+        <div class="clg-initial">${c.initials}</div>
+        <div>
+          <div class="clg-name">${c.name}</div>
+          <div class="clg-location">${c.location}</div>
+          <div class="clg-ranking">${c.ranking}</div>
+        </div>
+      </div>
+      <div class="clg-stats">
+        <div class="clg-stat"><div class="clg-stat-val">${c.tuition}</div><div class="clg-stat-lbl">Tuition</div></div>
+        <div class="clg-stat"><div class="clg-stat-val">${c.placement}%</div><div class="clg-stat-lbl">Placement</div></div>
+        <div class="clg-stat"><div class="clg-stat-val">${c.type}</div><div class="clg-stat-lbl">Type</div></div>
+      </div>
+      <div style="font-size:0.78rem;color:#7a82a8;margin-top:0.4rem;font-weight:600">Research Strength</div>
+      <div class="rating-bar"><div class="rating-fill" style="width:${c.researchRating*10}%"></div></div>
+    </div>`).join('');
+}
+function filterColleges(){
+  const q=document.getElementById('college-search').value.toLowerCase();
+  const f=document.getElementById('college-filter').value;
+  renderColleges(COLLEGES.filter(c=>(f==='all'||c.type===f)&&(c.name.toLowerCase().includes(q)||c.location.toLowerCase().includes(q))));
+}
+function showCollegeDetail(name){
+  const c=COLLEGES.find(x=>x.name===name);
+  document.getElementById('college-list-view').style.display='none';
+  document.getElementById('college-detail-view').style.display='block';
+  document.getElementById('college-detail-content').innerHTML=`
+    <div style="display:flex;align-items:flex-start;gap:1.5rem;margin-bottom:1.5rem;flex-wrap:wrap">
+      <div class="clg-initial" style="width:64px;height:64px;font-size:1rem;flex-shrink:0">${c.initials}</div>
+      <div>
+        <h2 style="font-family:'Orbitron',monospace;font-size:1.4rem;color:#e8eaf6">${c.name}</h2>
+        <div style="color:#b0b8d8;margin:0.25rem 0;font-size:0.9rem">${c.location} · ${c.type} · ${c.ranking}</div>
+        <div style="color:#f0a500;font-weight:700">${c.tuition} · Financial Aid: ${c.aid}</div>
+      </div>
+    </div>
+    <p style="color:#b0b8d8;line-height:1.7;margin-bottom:1.5rem">${c.desc}</p>
+    <div class="detail-grid">
+      <div class="detail-item"><div class="detail-label">Industry Placement Rate</div><div class="detail-value" style="color:#00e676">${c.placement}%</div></div>
+      <div class="detail-item"><div class="detail-label">Research Facilities Rating</div><div class="detail-value">${c.facilities} / 10</div></div>
+    </div>
+    <div class="section-subhead">Available Programs</div>
+    <ul class="bullet-list">${c.programs.map(p=>`<li>${p}</li>`).join('')}</ul>
+    <div class="section-subhead">Research Strengths</div>
+    <ul class="bullet-list">${c.strengths.map(p=>`<li>${p}</li>`).join('')}</ul>
+    <div class="section-subhead">Student Organizations</div>
+    <ul class="bullet-list">${c.clubs.map(p=>`<li>${p}</li>`).join('')}</ul>
+    <div style="margin-top:1.5rem">
+      <button class="btn-primary" onclick="showToast('Search for &quot;${c.name} aerospace admissions&quot; to visit their website!')">Visit Admissions Website →</button>
+    </div>`;
+}
+function showCollegeList(){
+  document.getElementById('college-list-view').style.display='block';
+  document.getElementById('college-detail-view').style.display='none';
+}
+
+// PORTFOLIO
+function savePortfolio(){
+  localStorage.setItem('aeropath-portfolio',JSON.stringify(portfolioItems));
+  renderPortfolio();
+}
+function renderPortfolio(){
+  const g=document.getElementById('portfolio-grid');
+  const colors={Project:'tag-blue',Award:'tag-gold',Competition:'tag-cyan',Certification:'tag-green',Research:'tag-blue',Leadership:'tag-cyan'};
+  if(!portfolioItems.length){
+    g.innerHTML='<div class="empty-state" style="grid-column:1/-1"><div class="empty-icon">📁</div><p>No items yet — add your first achievement below!</p></div>';
+  } else {
+    g.innerHTML=portfolioItems.map((item,i)=>`
+      <div class="portfolio-item">
+        <span class="pi-type-badge ${colors[item.type]||'tag-blue'}">${item.type}</span>
+        <div class="pi-title-main">${item.title}</div>
+        <div class="pi-date">${item.date}</div>
+        ${item.desc?`<div class="pi-item-desc">${item.desc}</div>`:''}
+        <button class="delete-btn" onclick="deletePortfolioItem(${i})" title="Remove">✕</button>
+      </div>`).join('');
+  }
+  const score=Math.min(100,portfolioItems.length*12);
+  document.getElementById('portfolio-score').textContent=score+'%';
+  document.getElementById('portfolio-bar').style.width=score+'%';
+  const tips=['Add your first project or award to get started!','Great start! Add competitions or certifications next.','Looking good! Consider adding research or leadership roles.','Strong portfolio — you are building real credibility!','Outstanding portfolio! You stand out from other applicants.'];
+  document.getElementById('portfolio-tip').textContent=tips[Math.min(4,Math.floor(portfolioItems.length/2))];
+}
+function addPortfolioItem(){
+  const type=document.getElementById('pf-type').value;
+  const title=document.getElementById('pf-title').value.trim();
+  const date=document.getElementById('pf-date').value.trim();
+  const desc=document.getElementById('pf-desc').value.trim();
+  if(!title){showToast('Please enter a title for your portfolio item.');return;}
+  portfolioItems.push({type,title,date:date||new Date().toLocaleDateString('en-US',{month:'short',year:'numeric'}),desc});
+  document.getElementById('pf-title').value='';
+  document.getElementById('pf-date').value='';
+  document.getElementById('pf-desc').value='';
+  savePortfolio();
+  showToast('Added to portfolio!');
+}
+function deletePortfolioItem(i){
+  portfolioItems.splice(i,1);
+  savePortfolio();
+  showToast('Item removed.');
+}
+
+// RESUME
+function updateResume(){
+  const name=document.getElementById('res-name').value||'Your Name';
+  const email=document.getElementById('res-email').value||'email@example.com';
+  const phone=document.getElementById('res-phone').value||'(555) 000-0000';
+  const school=document.getElementById('res-school').value||'Your High School';
+  const gpa=document.getElementById('res-gpa').value;
+  const skills=document.getElementById('res-skills').value.split(',').map(s=>s.trim()).filter(Boolean);
+  const obj=document.getElementById('res-obj').value||'Aspiring aerospace engineer passionate about space exploration and flight dynamics, seeking opportunities to develop technical skills and contribute to the future of aviation.';
+  const pItems=portfolioItems.slice(0,6);
+  document.getElementById('resume-preview').innerHTML=`
+    <div class="resume-name">${name}</div>
+    <div class="resume-contact">${email} &nbsp;|&nbsp; ${phone}</div>
+    <div class="resume-obj">${obj}</div>
+    <div class="resume-section-title">Education</div>
+    <div class="resume-item">
+      <div class="resume-item-title">${school}</div>
+      <div class="resume-item-sub">${gpa?'GPA: '+gpa+' &nbsp;·&nbsp; ':''} Expected Graduation: 2026</div>
+    </div>
+    ${pItems.length?`
+    <div class="resume-section-title">Projects & Experience</div>
+    ${pItems.map(item=>`<div class="resume-item">
+      <div class="resume-item-title">${item.title} <span style="font-weight:400;font-size:0.75rem;color:#666">— ${item.type}</span></div>
+      <div class="resume-item-sub">${item.date}${item.desc?' · '+item.desc.slice(0,90)+(item.desc.length>90?'...':''):''}</div>
+    </div>`).join('')}`:'<div class="resume-section-title">Projects & Experience</div><div style="font-size:0.82rem;color:#888;font-style:italic">Add items in the Portfolio tab to populate this section.</div>'}
+    ${skills.length?`<div class="resume-section-title">Technical Skills</div><div class="resume-skills-wrap">${skills.map(s=>`<span class="resume-skill">${s}</span>`).join('')}</div>`:''}
+    <div class="resume-section-title">Activities & Memberships</div>
+    <div class="resume-item"><div class="resume-item-title">AeroPath Platform — Student Member</div><div class="resume-item-sub">Pursuing structured aerospace career development through coursework, projects, and competitions</div></div>`;
+}
+function downloadResume(){
+  const name=document.getElementById('res-name').value||'Resume';
+  const text=document.getElementById('resume-preview').innerText;
+  const blob=new Blob([text],{type:'text/plain'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=name.replace(/\s+/g,'_')+'_Resume.txt';
+  a.click();
+  showToast('Resume downloaded!');
+}
+
+// TOAST
+let toastTimer;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),3200);
+}
+
+// INIT
+renderCareers(CAREERS);
+renderInterests();
+renderProjects(PROJECTS);
+renderOpps(OPPORTUNITIES);
+renderColleges(COLLEGES);
+renderPortfolio();
+updateResume();
+</script>
+</body>
+</html>
